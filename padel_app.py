@@ -19,7 +19,7 @@ vuelta = col2.selectbox("Selecciona la vuelta:", ["1ª vuelta", "2ª vuelta"])
 
 # === Cargar datos del Excel ===
 try:
-    df = pd.read_excel("padel.xlsx", sheet_name="clasificación")
+    df = pd.read_excel("padel.xlsx", sheet_name="clasificacion")
 except FileNotFoundError:
     st.error("❌ No se encontró el archivo 'padel.xlsx'. Súbelo al mismo directorio que este script.")
     st.stop()
