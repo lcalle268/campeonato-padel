@@ -38,12 +38,18 @@ resultados_f = resultados[
 
 # === Mostrar tabla de clasificación ===
 st.subheader(f"📊 Clasificación - {grupo} ({vuelta})")
+
 cols = [
     "CLASIFICACION", "PAREJA", "PUNTOS", "P. JUGADOS",
     "P GANADOS", "P EMPATADOS", "P. PERDIDOS",
     "SET GANADOS", "SET PERDIDOS"
 ]
+
 clasif_cols = [c for c in cols if c in clasif_f.columns]
+
+# Aseguramos orden numérico
+clasif_f = clasif_f.sort_values(by="CLASIFICACION", ascending=True)
+
 st.dataframe(clasif_f[clasif_cols], use_container_width=True)
 
 # === MATRIZ DE RESULTADOS ===
