@@ -17,39 +17,43 @@ col1, col2 = st.columns(2)
 grupo = col1.selectbox("Selecciona el grupo:", ["Mediocre alto", "Mediocre medio", "Mediocre bajo"])
 vuelta = col2.selectbox("Selecciona la vuelta:", ["1ª vuelta", "2ª vuelta"])
 
-# === Cargar datos según selección ===
-# Puedes reemplazar esto con la lectura desde un Excel si tienes varias hojas
-# Ejemplo: pd.read_excel("padel.xlsx", sheet_name=f"{grupo}_{vuelta}")
-# Por ahora creamos datos de ejemplo:
+# === Cargar datos del Excel ===
+try:
+    df = pd.read_excel("padel.xlsx", sheet_name="clasificación")
+except FileNotFoundError:
+    st.error("❌ No se encontró el archivo 'padel.xlsx'. Súbelo al mismo directorio que este script.")
+    st.stop()
 
-parejas = [
-    "Teresa-Leticia", "las barbas", "Alba-Luis",
-    "Vicente-Victor", "Salvador-Marta", "Alberto-Esperanza"
-]
+# Normalizamos los nombres de columnas por si hay espacios o mayúsculas diferentes
+df.columns = df.columns.str.strip().str.upper()
 
-clasificacion = pd.DataFrame({
-    "CLASIFICACION": range(1, len(parejas) + 1),
-    "PAREJA": parejas,
-    "PUNTOS": [0]*6,
-    "P. JUGADOS": [0]*6,
-    "P. GANADOS": [0]*6,
-    "P. EMPATADOS": [0]*6,
-    "P. PERDIDOS": [0]*6,
-    "SET GANADOS": [0]*6,
-    "SET PERDIDOS": [0]*6
-})
+# === Filtrar por grupo ===
+df_filtrado = df[df["GRUPO"].str.lower() == grupo.lower()]
 
-st.subheader(f"📊 Clasificación - {grupo} ({vuelta})")
-st.dataframe(clasificacion, use_container_width=True)
+if df_filtrado.empty:
+    st.warning(f"No hay datos disponibles para el grupo **{grupo}**.")
+else:
+    # Seleccionamos las columnas deseadas
+    columnas = [
+        "CLASIFICACION", "PAREJA", "PUNTOS", "P. JUGADOS",
+        "P GANADOS", "P EMPATADOS", "P. PERDIDOS",
+        "SET GANADOS", "SET PERDIDOS"
+    ]
 
-# === Crear matriz de resultados ===
-resultados = pd.DataFrame(index=parejas, columns=parejas)
-for i in range(len(parejas)):
-    for j in range(len(parejas)):
-        if i == j:
-            resultados.iloc[i, j] = "-"
-        else:
-            resultados.iloc[i, j] = ""
+    # Verificamos que todas existan en el Excel
+    columnas_validas = [c for c in columnas if c in df_filtrado.columns]
+    df_filtrado = df_filtrado[columnas_validas].sort_values("CLASIFICACION")
 
-st.subheader(f"🎾 Resultados {vuelta}")
-st.dataframe(resultados, use_container_width=True)
+    st.subheader(f"📊 Clasificación - {grupo} ({vuelta})")
+    st.dataframe(df_filtrado, use_container_width=True)
+
+# === Crear plantilla vacía de resultados ===
+parejas = df_filtrado["PAREJA"].tolist() if not df_filtrado.empty else []
+if parejas:
+    resultados = pd.DataFrame(index=parejas, columns=parejas)
+    for i in range(len(parejas)):
+        for j in range(len(parejas)):
+            resultados.iloc[i, j] = "🎾" if i == j else ""
+    
+    st.subheader(f"🎾 Resultados {vuelta}")
+    st.dataframe(resultados, use_container_width=True)
