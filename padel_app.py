@@ -37,7 +37,7 @@ resultados_f = resultados[
 ]
 
 # === Mostrar tabla de clasificación ===
-st.subheader(f"📊 Clasificación - {grupo} ({vuelta})")
+st.subheader(f"📊 Clasificación - {grupo}")
 
 cols = [
     "CLASIFICACION", "PAREJA", "PUNTOS", "P. JUGADOS",
