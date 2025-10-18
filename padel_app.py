@@ -47,7 +47,7 @@ cols = [
 clasif_cols = [c for c in cols if c in clasif_f.columns]
 
 clasif_f = clasif_f.sort_values(by="CLASIFICACION", ascending=True)
-st.dataframe(clasif_f[clasif_cols], use_container_width=True)
+st.dataframe(clasif_f[clasif_cols], use_container_width=True, hide_index=True)
 
 # === Crear matriz de resultados ===
 parejas = clasif_f["PAREJA"].tolist()
@@ -69,4 +69,4 @@ for p in parejas:
     matriz.loc[p, p] = "🎾"
 
 st.subheader(f"🎾 Resultados {vuelta}")
-st.dataframe(matriz, use_container_width=True, hide_index=True)
+st.dataframe(matriz, use_container_width=True)
