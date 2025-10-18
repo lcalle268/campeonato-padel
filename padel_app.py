@@ -10,7 +10,7 @@ import pandas as pd
 
 st.set_page_config(page_title="Campeonato de Pádel", page_icon="🏆", layout="wide")
 
-st.title("🏆 Campeonato de Pádel - Oficina")
+st.title("🏆 Campeonato de Pádel - SGFAL")
 
 # === Selección de grupo y vuelta ===
 col1, col2 = st.columns(2)
