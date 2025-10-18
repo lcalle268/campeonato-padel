@@ -50,7 +50,8 @@ clasif_cols = [c for c in cols if c in clasif_f.columns]
 # Aseguramos orden numérico
 clasif_f = clasif_f.sort_values(by="CLASIFICACION", ascending=True)
 
-st.dataframe(clasif_f[clasif_cols], use_container_width=True)
+st.dataframe(clasif_f[clasif_cols], use_container_width=True, hide_index=True)
+
 
 # === MATRIZ DE RESULTADOS ===
 parejas = clasif_f["PAREJA"].tolist()
