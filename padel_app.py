@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Oct 17 13:13:11 2025
+Created on Sat Oct 18 12:14:33 2025
 
 @author: LCALLE
 """
@@ -8,23 +8,48 @@ Created on Fri Oct 17 13:13:11 2025
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(page_title="Campeonato de Pádel", layout="wide")
+st.set_page_config(page_title="Campeonato de Pádel", page_icon="🏆", layout="wide")
+
 st.title("🏆 Campeonato de Pádel - SGFAL")
 
-# Leer los datos desde el Excel
-partidos = pd.read_excel("padel.xlsx", sheet_name="partidos")
-clasificacion = pd.read_excel("padel.xlsx", sheet_name="clasificacion")
+# === Selección de grupo y vuelta ===
+col1, col2 = st.columns(2)
+grupo = col1.selectbox("Selecciona el grupo:", ["Mediocre alto", "Mediocre medio", "Mediocre bajo"])
+vuelta = col2.selectbox("Selecciona la vuelta:", ["1ª vuelta", "2ª vuelta"])
 
-# Selección de categoría
-categoria = st.selectbox("Selecciona categoría:", partidos["categoria"].unique())
+# === Cargar datos según selección ===
+# Puedes reemplazar esto con la lectura desde un Excel si tienes varias hojas
+# Ejemplo: pd.read_excel("padel.xlsx", sheet_name=f"{grupo}_{vuelta}")
+# Por ahora creamos datos de ejemplo:
 
-# Mostrar resultados
-st.subheader("Resultados")
-st.dataframe(partidos[partidos["categoria"] == categoria])
+parejas = [
+    "Teresa-Leticia", "las barbas", "Alba-Luis",
+    "Vicente-Victor", "Salvador-Marta", "Alberto-Esperanza"
+]
 
-# Mostrar clasificación
-st.subheader("Clasificación")
-clasif_filtrada = clasificacion[clasificacion["categoria"] == categoria].sort_values(
-    by="puntos", ascending=False
-)
-st.dataframe(clasif_filtrada)
+clasificacion = pd.DataFrame({
+    "CLASIFICACION": range(1, len(parejas) + 1),
+    "PAREJA": parejas,
+    "PUNTOS": [0]*6,
+    "P. JUGADOS": [0]*6,
+    "P. GANADOS": [0]*6,
+    "P. EMPATADOS": [0]*6,
+    "P. PERDIDOS": [0]*6,
+    "SET GANADOS": [0]*6,
+    "SET PERDIDOS": [0]*6
+})
+
+st.subheader(f"📊 Clasificación - {grupo} ({vuelta})")
+st.dataframe(clasificacion, use_container_width=True)
+
+# === Crear matriz de resultados ===
+resultados = pd.DataFrame(index=parejas, columns=parejas)
+for i in range(len(parejas)):
+    for j in range(len(parejas)):
+        if i == j:
+            resultados.iloc[i, j] = "-"
+        else:
+            resultados.iloc[i, j] = ""
+
+st.subheader(f"🎾 Resultados {vuelta}")
+st.dataframe(resultados, use_container_width=True)
