@@ -7,6 +7,7 @@ Created on Sat Oct 18 12:14:33 2025
 
 import streamlit as st
 import pandas as pd
+import subprocess
 
 st.set_page_config(page_title="Campeonato de Pádel", page_icon="🏆", layout="wide")
 
@@ -164,6 +165,7 @@ elif pagina == "Estadísticas 📊":
 elif pagina == "Campeonato Final 🏆":
     st.header("🏆 Cuadro final")
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
+
 
 
 
