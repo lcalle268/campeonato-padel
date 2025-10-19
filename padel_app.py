@@ -136,7 +136,6 @@ elif pagina == "Participantes 👥":
 # =============================
 elif pagina == "Informe semanal 🗞️":
     st.header("🗞️ Informe semanal del campeonato")
-
     st.info("Aquí se irán comentando los partidos, tanto los éxitos como los fracasos (en proceso⚙️)")
 
 # =============================
@@ -152,6 +151,7 @@ elif pagina == "Estadísticas 📊":
 elif pagina == "Campeonato Final 🏆":
     st.header("🏆 Cuadro final")
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
+
 
 
 
