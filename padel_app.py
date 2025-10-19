@@ -18,6 +18,7 @@ pagina = st.sidebar.radio(
     [
         "Clasificación 🏅",
         "Participantes 👥",
+        "Informe semanal 🗞️", 
         "Estadísticas 📊",
         "Campeonato Final 🏆"
     ]
@@ -131,17 +132,26 @@ elif pagina == "Participantes 👥":
             st.divider()
 
 # =============================
-# === PESTAÑA 3: ESTADÍSTICAS
+# === PESTAÑA 3: INFORME SEMANAL
+# =============================
+elif pagina == "Informe semanal 🗞️":
+    st.header("🗞️ Informe semanal del campeonato")
+
+    st.info("Aquí irán comentando los partidos, tanto los éxitos como los fracasos (en proceso⚙️)")
+
+# =============================
+# === PESTAÑA 4: ESTADÍSTICAS
 # =============================
 elif pagina == "Estadísticas 📊":
     st.header("📊 Estadísticas de las parejas")
     st.info("Aquí se podrán ver gráficos de la evolución de cada pareja (en proceso⚙️)")
 
 # =============================
-# === PESTAÑA 4: CAMPEONATO
+# === PESTAÑA 5: CAMPEONATO
 # =============================
 elif pagina == "Campeonato Final 🏆":
     st.header("🏆 Cuadro final")
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
+
 
 
