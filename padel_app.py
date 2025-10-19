@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+n# -*- coding: utf-8 -*-
 """
 Created on Sat Oct 18 12:14:33 2025
 
@@ -137,7 +137,7 @@ elif pagina == "Participantes 👥":
 elif pagina == "Informe semanal 🗞️":
     st.header("🗞️ Informe semanal del campeonato")
 
-    st.info("Aquí irán comentando los partidos, tanto los éxitos como los fracasos (en proceso⚙️)")
+    st.info("Aquí se irán comentando los partidos, tanto los éxitos como los fracasos (en proceso⚙️)")
 
 # =============================
 # === PESTAÑA 4: ESTADÍSTICAS
@@ -152,6 +152,7 @@ elif pagina == "Estadísticas 📊":
 elif pagina == "Campeonato Final 🏆":
     st.header("🏆 Cuadro final")
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
+
 
 
 
