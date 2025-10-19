@@ -124,11 +124,12 @@ elif pagina == "Participantes 👥":
 # =============================
 elif pagina == "Estadísticas 📊":
     st.header("📊 Estadísticas de las parejas")
-    st.info("Aquí podrás añadir gráficos y comparativas entre parejas.")
+    st.info("Aquí se podrán ver gráficos de la evolución de cada pareja (en proceso⚙️)")
 
 # =============================
 # === PESTAÑA 4: CAMPEONATO
 # =============================
 elif pagina == "Campeonato Final 🏆":
     st.header("🏆 Cuadro final")
-    st.info("Aquí se podrá visualizar el cuadro de semifinales y finales.")
+    st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
+
