@@ -7,7 +7,6 @@ Created on Sat Oct 18 12:14:33 2025
 
 import streamlit as st
 import pandas as pd
-import subprocess
 
 st.set_page_config(page_title="Campeonato de Pádel", page_icon="🏆", layout="wide")
 
@@ -31,20 +30,10 @@ pagina = st.sidebar.radio(
 if pagina == "Clasificación 🏅":
     st.header("📈 Clasificación por grupo y vuelta")
 
-    # === Botón para actualizar clasificación (ejecuta R) ===
-    if st.button("🔄 Actualizar clasificación"):
-        try:
-            subprocess.run(["Rscript", "actualizar_clasificacion.R"], check=True)
-            st.success("✅ Clasificación actualizada correctamente.")
-        except Exception as e:
-            st.error(f"❌ Error al ejecutar R: {e}")
-
-    # === Selección de grupo y vuelta ===
     col1, col2 = st.columns(2)
     grupo = col1.selectbox("Selecciona el grupo:", ["Mediocre alto", "Mediocre medio", "Mediocre bajo"])
     vuelta = col2.selectbox("Selecciona la vuelta:", ["1ª vuelta", "2ª vuelta"])
 
-    # === Cargar datos actualizados ===
     try:
         clasif = pd.read_excel("padel.xlsx", sheet_name="clasificacion")
         resultados = pd.read_excel("padel.xlsx", sheet_name="resultados")
@@ -52,18 +41,15 @@ if pagina == "Clasificación 🏅":
         st.error("❌ No se encontró el archivo 'padel.xlsx'.")
         st.stop()
 
-    # === Normalizar columnas ===
     clasif.columns = clasif.columns.str.strip().str.upper()
     resultados.columns = resultados.columns.str.strip().str.upper()
 
-    # === Filtrar grupo seleccionado ===
-    clasif_f = clasif[clasif["GRUPO"].str.lower() == grupo.lower()]
+    clasif_f = clasif[clasif["GRUPO"].str.lower() == grupo.lower()].sort_values("CLASIFICACION")
     resultados_f = resultados[
         (resultados["GRUPO"].str.lower() == grupo.lower()) &
         (resultados["VUELTA"].str.lower() == vuelta.lower())
     ]
 
-    # === Mostrar tabla de clasificación ===
     st.subheader(f"📊 Clasificación - {grupo}")
 
     cols = [
@@ -73,9 +59,9 @@ if pagina == "Clasificación 🏅":
     ]
     clasif_cols = [c for c in cols if c in clasif_f.columns]
 
+    clasif_f = clasif_f.sort_values(by="CLASIFICACION", ascending=True)
     st.dataframe(clasif_f[clasif_cols], use_container_width=True, hide_index=True)
 
-    # === Crear matriz de resultados ===
     parejas = clasif_f["PAREJA"].tolist()
     matriz = pd.DataFrame(index=parejas, columns=parejas)
 
@@ -165,6 +151,7 @@ elif pagina == "Estadísticas 📊":
 elif pagina == "Campeonato Final 🏆":
     st.header("🏆 Cuadro final")
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
+
 
 
 
