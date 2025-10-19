@@ -196,7 +196,7 @@ elif pagina == "Estadísticas 📊":
         .rename(columns={"PG": "Ganados", "PE": "Empatados", "PP": "Perdidos", "PUNTOS_ACUM": "Puntos Totales"})
     )
 
-    st.dataframe(resumen, use_container_width=True)
+    st.dataframe(resumen, use_container_width=True, hide_index=True)
 
 # =============================
 # === PESTAÑA 5: CAMPEONATO
@@ -206,3 +206,4 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
