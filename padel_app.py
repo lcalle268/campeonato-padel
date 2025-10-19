@@ -87,16 +87,54 @@ if pagina == "Clasificación 🏅":
 # === PESTAÑA 2: PARTICIPANTES ===
 elif pagina == "Participantes 👥":
     st.header("👥 Información de los participantes")
-    st.info("Aquí podrás mostrar fotos, nombres y detalles de las parejas.")
+    elif pagina == "Participantes 👥":
+    st.header("👥 Información de los participantes")
+
+    # === Cargar datos ===
+    try:
+        participantes = pd.read_excel("padel.xlsx", sheet_name="participantes")
+    except FileNotFoundError:
+        st.error("❌ No se encontró la hoja 'participantes' en el archivo padel.xlsx.")
+        st.stop()
+
+    # Normalizar columnas
+    participantes.columns = participantes.columns.str.strip().str.upper()
+
+    # === Selección de grupo ===
+    grupos = sorted(participantes["GRUPO"].dropna().unique().tolist())
+    grupos_opciones = ["Todos los grupos"] + grupos
+    grupo_sel = st.selectbox("Selecciona el grupo:", grupos_opciones)
+
+    # === Filtrar según grupo seleccionado ===
+    if grupo_sel != "Todos los grupos":
+        participantes_f = participantes[participantes["GRUPO"].str.lower() == grupo_sel.lower()]
+    else:
+        participantes_f = participantes.copy()
+
+    # === Mostrar datos ===
+    st.subheader(f"👟 Participantes - {grupo_sel}")
+
+    # Agrupar por pareja
+    for (grupo, pareja), datos_pareja in participantes_f.groupby(["GRUPO", "PAREJA"]):
+        with st.expander(f"🎾 {grupo} | Pareja {pareja}"):
+            for _, fila in datos_pareja.iterrows():
+                st.markdown(
+                    f"""
+                    - **Nombre:** {fila['NOMBRE']}
+                    - **Correo electrónico:** [{fila['CORREO ELECTRONICO']}](mailto:{fila['CORREO ELECTRONICO']})
+                    """
+                )
+
 
 # === PESTAÑA 3: ESTADÍSTICAS ===
 elif pagina == "Estadísticas 📊":
     st.header("📊 Estadísticas de las parejas")
-    st.info("En esta sección podrás añadir gráficos y comparativas entre parejas.")
+    #st.info("En esta sección podrás añadir gráficos y comparativas entre parejas.")
 
 # === PESTAÑA 4: CAMPEONATO FINAL ===
 elif pagina == "Campeonato Final 🏆":
     st.header("🏆 Cuadro final")
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales.")
+
 
 
