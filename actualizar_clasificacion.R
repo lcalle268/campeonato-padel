@@ -151,15 +151,15 @@ clasificacion_final <- clasificacion_auto %>%
   arrange(GRUPO, CLASIFICACION) %>%  # respeta el orden definido arriba
   rename(
     `P. JUGADOS` = PJ,
-    `P GANADOS` = PG,
-    `P EMPATADOS` = PE,
+    `P. GANADOS` = PG,
+    `P. EMPATADOS` = PE,
     `P. PERDIDOS` = PP,
     `SET GANADOS` = SG,
     `SET PERDIDOS` = SP
   ) %>%
   select(
     GRUPO, CLASIFICACION, PAREJA, PUNTOS,
-    `P. JUGADOS`, `P GANADOS`, `P EMPATADOS`,
+    `P. JUGADOS`, `P. GANADOS`, `P. EMPATADOS`,
     `P. PERDIDOS`, `SET GANADOS`, `SET PERDIDOS`
   )
 
