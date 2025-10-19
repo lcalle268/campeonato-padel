@@ -30,15 +30,18 @@ pagina = st.sidebar.radio(
 if pagina == "Clasificación 🏅":
     st.header("📈 Clasificación por grupo y vuelta")
 
-    # === Selección de grupo y vuelta ===
-    col1, col2 = st.columns(2)
-    grupo = col1.selectbox("Selecciona el grupo:", ["Mediocre alto", "Mediocre medio", "Mediocre bajo"])
-    vuelta = col2.selectbox("Selecciona la vuelta:", ["1ª vuelta", "2ª vuelta"])
+    # === Botón para actualizar clasificación ===
+    if st.button("🔄 Actualizar clasificación"):
+        try:
+            subprocess.run(["Rscript", "actualizar_clasificacion.R"], check=True)
+            st.success("✅ Clasificación actualizada correctamente.")
+        except Exception as e:
+            st.error(f"❌ Error al ejecutar R: {e}")
 
-    # === Cargar datos ===
-    try:
-        clasif = pd.read_excel("padel.xlsx", sheet_name="clasificacion")
-        resultados = pd.read_excel("padel.xlsx", sheet_name="resultados")
+    # === Luego leer los datos actualizados ===
+    clasif = pd.read_excel("padel.xlsx", sheet_name="clasificacion")
+    resultados = pd.read_excel("padel.xlsx", sheet_name="resultados")
+
     except FileNotFoundError:
         st.error("❌ No se encontró el archivo 'padel.xlsx'.")
         st.stop()
@@ -156,6 +159,7 @@ elif pagina == "Estadísticas 📊":
 elif pagina == "Campeonato Final 🏆":
     st.header("🏆 Cuadro final")
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
+
 
 
 
