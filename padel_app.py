@@ -106,18 +106,29 @@ elif pagina == "Participantes 👥":
 
     grupos_pareja = df.groupby(["GRUPO", "PAREJA"])
 
-    for (grupo_name, pareja_id), data in grupos_pareja:
-        st.markdown(f"### 🎾 {grupo_name} — Pareja {pareja_id}")
-        cols = st.columns(2)
-        for i, (_, row) in enumerate(data.iterrows()):
-            with cols[i % 2]:
-                st.markdown(
-                    f"""
-                    **👤 Nombre:** {row['NOMBRE']}  
-                    **✉️ Correo:** {row['CORREO ELECTRONICO']}
-                    """
-                )
-        st.divider()
+    orden_grupos = ["Mediocre alto", "Mediocre medio", "Mediocre bajo"]
+
+    for grupo_name in orden_grupos:
+        parejas_grupo = [(g, p, d) for (g, p), d in grupos_pareja if g.lower() == grupo_name.lower()]
+        if not parejas_grupo:
+            continue
+
+        st.markdown(f"## 🎾 {grupo_name}")
+        for _, pareja_id, data in parejas_grupo:
+            st.markdown(f"<div class='grupo-titulo'>Pareja {pareja_id}</div>", unsafe_allow_html=True)
+            cols = st.columns(2)
+            for i, (_, row) in enumerate(data.iterrows()):
+                with cols[i % 2]:
+                    st.markdown(
+                        f"""
+                        <div class='card'>
+                            <h4>{row['NOMBRE']}</h4>
+                            <p>✉️ {row['CORREO ELECTRONICO']}</p>
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+            st.divider()
 
 # =============================
 # === PESTAÑA 3: ESTADÍSTICAS
@@ -132,4 +143,5 @@ elif pagina == "Estadísticas 📊":
 elif pagina == "Campeonato Final 🏆":
     st.header("🏆 Cuadro final")
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
+
 
