@@ -59,7 +59,7 @@ if pagina == "Clasificación 🏅":
 
     cols = [
         "CLASIFICACION", "PAREJA", "PUNTOS", "P. JUGADOS",
-        "P GANADOS", "P EMPATADOS", "P. PERDIDOS",
+        "P. GANADOS", "P. EMPATADOS", "P. PERDIDOS",
         "SET GANADOS", "SET PERDIDOS"
     ]
     clasif_cols = [c for c in cols if c in clasif_f.columns]
@@ -156,6 +156,7 @@ elif pagina == "Estadísticas 📊":
 elif pagina == "Campeonato Final 🏆":
     st.header("🏆 Cuadro final")
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
+
 
 
 
