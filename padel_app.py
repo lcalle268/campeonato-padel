@@ -1,4 +1,4 @@
-n# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 Created on Sat Oct 18 12:14:33 2025
 
@@ -151,6 +151,7 @@ elif pagina == "Estadísticas 📊":
 elif pagina == "Campeonato Final 🏆":
     st.header("🏆 Cuadro final")
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
+
 
 
 
