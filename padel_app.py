@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sat Oct 18 12:14:33 2025
-
 @author: LCALLE
 """
 
 import streamlit as st
 import pandas as pd
+import altair as alt
 
 st.set_page_config(page_title="Campeonato de Pádel", page_icon="🏆", layout="wide")
 
@@ -18,7 +18,7 @@ pagina = st.sidebar.radio(
     [
         "Clasificación 🏅",
         "Participantes 👥",
-        "Informe semanal 🗞️", 
+        "Informe semanal 🗞️",
         "Estadísticas 📊",
         "Campeonato Final 🏆"
     ]
@@ -148,7 +148,55 @@ elif pagina == "Informe semanal 🗞️":
 # =============================
 elif pagina == "Estadísticas 📊":
     st.header("📊 Estadísticas de las parejas")
-    st.info("Aquí se podrán ver gráficos de la evolución de cada pareja (en proceso⚙️)")
+
+    try:
+        hist = pd.read_excel("padel.xlsx", sheet_name="historial_partidos")
+    except FileNotFoundError:
+        st.error("❌ No se encontró la hoja 'historial_partidos' en el archivo 'padel.xlsx'.")
+        st.stop()
+
+    # Normalizar
+    hist.columns = hist.columns.str.strip().str.upper()
+    hist["GRUPO"] = hist["GRUPO"].str.title()
+
+    grupos = hist["GRUPO"].unique().tolist()
+    grupo_sel = st.selectbox("Selecciona el grupo:", grupos)
+    parejas = hist[hist["GRUPO"] == grupo_sel]["PAREJA"].unique().tolist()
+    pareja_sel = st.selectbox("Selecciona una pareja (o 'Todas'):", ["Todas"] + parejas)
+
+    # Filtrar
+    if pareja_sel != "Todas":
+        df_plot = hist[(hist["GRUPO"] == grupo_sel) & (hist["PAREJA"] == pareja_sel)]
+    else:
+        df_plot = hist[hist["GRUPO"] == grupo_sel]
+
+    # === Gráfico de evolución de puntos ===
+    st.subheader("📈 Evolución de puntos acumulados")
+
+    chart = (
+        alt.Chart(df_plot)
+        .mark_line(point=True)
+        .encode(
+            x=alt.X("PARTIDO:Q", title="Número de partido"),
+            y=alt.Y("PUNTOS_ACUM:Q", title="Puntos acumulados"),
+            color=alt.Color("PAREJA:N", legend=alt.Legend(title="Pareja")),
+            tooltip=["PAREJA", "RESULTADO", "PUNTOS_ACUM", "PG", "PE", "PP"]
+        )
+        .properties(height=400)
+    )
+
+    st.altair_chart(chart, use_container_width=True)
+
+    # === Tabla resumen de rendimiento ===
+    st.subheader("📋 Rendimiento acumulado")
+    resumen = (
+        df_plot.groupby("PAREJA")
+        .agg({"PG": "max", "PE": "max", "PP": "max", "PUNTOS_ACUM": "max"})
+        .reset_index()
+        .rename(columns={"PG": "Ganados", "PE": "Empatados", "PP": "Perdidos", "PUNTOS_ACUM": "Puntos Totales"})
+    )
+
+    st.dataframe(resumen, use_container_width=True)
 
 # =============================
 # === PESTAÑA 5: CAMPEONATO
@@ -157,15 +205,4 @@ elif pagina == "Campeonato Final 🏆":
     st.header("🏆 Cuadro final")
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
-
-
-
-
-
-
-
-
-
-
-
-
+  
