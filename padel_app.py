@@ -12,7 +12,7 @@ st.set_page_config(page_title="Campeonato de Pádel", page_icon="🏆", layout="
 
 st.title("🏆 Campeonato de Pádel - SGFAL")
 
-# === Barra de navegación principal ===
+# === Barra lateral de navegación ===
 pagina = st.sidebar.radio(
     "Navegación",
     [
@@ -23,16 +23,16 @@ pagina = st.sidebar.radio(
     ]
 )
 
-# === PESTAÑA 1: CLASIFICACIÓN ===
+# =============================
+# === PESTAÑA 1: CLASIFICACIÓN
+# =============================
 if pagina == "Clasificación 🏅":
     st.header("📈 Clasificación por grupo y vuelta")
 
-    # Selección de grupo y vuelta
     col1, col2 = st.columns(2)
     grupo = col1.selectbox("Selecciona el grupo:", ["Mediocre alto", "Mediocre medio", "Mediocre bajo"])
     vuelta = col2.selectbox("Selecciona la vuelta:", ["1ª vuelta", "2ª vuelta"])
 
-    # Cargar datos
     try:
         clasif = pd.read_excel("padel.xlsx", sheet_name="clasificacion")
         resultados = pd.read_excel("padel.xlsx", sheet_name="resultados")
@@ -40,18 +40,15 @@ if pagina == "Clasificación 🏅":
         st.error("❌ No se encontró el archivo 'padel.xlsx'.")
         st.stop()
 
-    # Normalizar nombres
     clasif.columns = clasif.columns.str.strip().str.upper()
     resultados.columns = resultados.columns.str.strip().str.upper()
 
-    # Filtrar por selección
     clasif_f = clasif[clasif["GRUPO"].str.lower() == grupo.lower()].sort_values("CLASIFICACION")
     resultados_f = resultados[
         (resultados["GRUPO"].str.lower() == grupo.lower()) &
         (resultados["VUELTA"].str.lower() == vuelta.lower())
     ]
 
-    # Mostrar tabla de clasificación
     st.subheader(f"📊 Clasificación - {grupo}")
 
     cols = [
@@ -64,7 +61,6 @@ if pagina == "Clasificación 🏅":
     clasif_f = clasif_f.sort_values(by="CLASIFICACION", ascending=True)
     st.dataframe(clasif_f[clasif_cols], use_container_width=True, hide_index=True)
 
-    # Crear matriz de resultados
     parejas = clasif_f["PAREJA"].tolist()
     matriz = pd.DataFrame(index=parejas, columns=parejas)
 
@@ -84,57 +80,55 @@ if pagina == "Clasificación 🏅":
     st.subheader(f"🎾 Resultados {vuelta}")
     st.dataframe(matriz, use_container_width=True)
 
-# === PESTAÑA 2: PARTICIPANTES ===
+# =============================
+# === PESTAÑA 2: PARTICIPANTES
+# =============================
 elif pagina == "Participantes 👥":
     st.header("👥 Información de los participantes")
-    elif pagina == "Participantes 👥":
-    st.header("👥 Información de los participantes")
 
-    # === Cargar datos ===
+    grupo = st.selectbox(
+        "Selecciona el grupo:",
+        ["Todos", "Mediocre alto", "Mediocre medio", "Mediocre bajo"]
+    )
+
     try:
         participantes = pd.read_excel("padel.xlsx", sheet_name="participantes")
     except FileNotFoundError:
-        st.error("❌ No se encontró la hoja 'participantes' en el archivo padel.xlsx.")
+        st.error("❌ No se encontró la hoja 'participantes' en el archivo 'padel.xlsx'.")
         st.stop()
 
-    # Normalizar columnas
     participantes.columns = participantes.columns.str.strip().str.upper()
 
-    # === Selección de grupo ===
-    grupos = sorted(participantes["GRUPO"].dropna().unique().tolist())
-    grupos_opciones = ["Todos los grupos"] + grupos
-    grupo_sel = st.selectbox("Selecciona el grupo:", grupos_opciones)
-
-    # === Filtrar según grupo seleccionado ===
-    if grupo_sel != "Todos los grupos":
-        participantes_f = participantes[participantes["GRUPO"].str.lower() == grupo_sel.lower()]
+    if grupo != "Todos":
+        df = participantes[participantes["GRUPO"].str.lower() == grupo.lower()]
     else:
-        participantes_f = participantes.copy()
+        df = participantes.copy()
 
-    # === Mostrar datos ===
-    st.subheader(f"👟 Participantes - {grupo_sel}")
+    grupos_pareja = df.groupby(["GRUPO", "PAREJA"])
 
-    # Agrupar por pareja
-    for (grupo, pareja), datos_pareja in participantes_f.groupby(["GRUPO", "PAREJA"]):
-        with st.expander(f"🎾 {grupo} | Pareja {pareja}"):
-            for _, fila in datos_pareja.iterrows():
+    for (grupo_name, pareja_id), data in grupos_pareja:
+        st.markdown(f"### 🎾 {grupo_name} — Pareja {pareja_id}")
+        cols = st.columns(2)
+        for i, (_, row) in enumerate(data.iterrows()):
+            with cols[i % 2]:
                 st.markdown(
                     f"""
-                    - **Nombre:** {fila['NOMBRE']}
-                    - **Correo electrónico:** [{fila['CORREO ELECTRONICO']}](mailto:{fila['CORREO ELECTRONICO']})
+                    **👤 Nombre:** {row['NOMBRE']}  
+                    **✉️ Correo:** {row['CORREO ELECTRONICO']}
                     """
                 )
+        st.divider()
 
-
-# === PESTAÑA 3: ESTADÍSTICAS ===
+# =============================
+# === PESTAÑA 3: ESTADÍSTICAS
+# =============================
 elif pagina == "Estadísticas 📊":
     st.header("📊 Estadísticas de las parejas")
-    #st.info("En esta sección podrás añadir gráficos y comparativas entre parejas.")
+    st.info("Aquí podrás añadir gráficos y comparativas entre parejas.")
 
-# === PESTAÑA 4: CAMPEONATO FINAL ===
+# =============================
+# === PESTAÑA 4: CAMPEONATO
+# =============================
 elif pagina == "Campeonato Final 🏆":
     st.header("🏆 Cuadro final")
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales.")
-
-
-
