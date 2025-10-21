@@ -22,7 +22,9 @@ resultados <- resultados %>%
     PAREJA2 = str_squish(PAREJA2)
   )
 
-# === 2) Función para contar sets ganados/perdidos ===
+# === 2) Funciones auxiliares ===
+
+# Contar sets ganados/perdidos
 contar_sets <- function(txt){
   if (is.na(txt) || txt == "") return(c(SG=0, SP=0))
   m <- str_match_all(txt, "(\\d+)[\\-–—](\\d+)")
@@ -33,12 +35,24 @@ contar_sets <- function(txt){
     SP = sum(a < b, na.rm=TRUE))
 }
 
+# Contar juegos ganados/perdidos
+contar_juegos <- function(txt){
+  if (is.na(txt) || txt == "") return(c(JG=0, JP=0))
+  m <- str_match_all(txt, "(\\d+)[\\-–—](\\d+)")
+  m <- m[[1]]
+  if (nrow(m) == 0) return(c(JG=0, JP=0))
+  a <- as.numeric(m[,2]); b <- as.numeric(m[,3])
+  c(JG = sum(a, na.rm=TRUE), JP = sum(b, na.rm=TRUE))
+}
+
 # === 3) Construir estadísticas por partido ===
 stats <- list()
 for (i in seq_len(nrow(resultados))){
   r <- resultados[i,]
   sg1sp1 <- contar_sets(r$RESULTADO_P1P2)
   sg2sp2 <- contar_sets(r$RESULTADO_P2P1)
+  jg1jp1 <- contar_juegos(r$RESULTADO_P1P2)
+  jg2jp2 <- contar_juegos(r$RESULTADO_P2P1)
   
   stats[[length(stats)+1]] <- tibble(
     GRUPO = r$GRUPO, PAREJA = r$PAREJA1,
@@ -48,6 +62,8 @@ for (i in seq_len(nrow(resultados))){
     PE = as.integer(sg1sp1["SG"] == sg1sp1["SP"]),
     SG = unname(sg1sp1["SG"]),
     SP = unname(sg1sp1["SP"]),
+    JG = unname(jg1jp1["JG"]),
+    JP = unname(jg1jp1["JP"]),
     PUNTOS = ifelse(sg1sp1["SG"] > sg1sp1["SP"], 3,
                     ifelse(sg1sp1["SG"] == sg1sp1["SP"], 1, 0))
   )
@@ -60,6 +76,8 @@ for (i in seq_len(nrow(resultados))){
     PE = as.integer(sg2sp2["SG"] == sg2sp2["SP"]),
     SG = unname(sg2sp2["SG"]),
     SP = unname(sg2sp2["SP"]),
+    JG = unname(jg2jp2["JG"]),
+    JP = unname(jg2jp2["JP"]),
     PUNTOS = ifelse(sg2sp2["SG"] > sg2sp2["SP"], 3,
                     ifelse(sg2sp2["SG"] == sg2sp2["SP"], 1, 0))
   )
@@ -79,20 +97,25 @@ clasificacion_auto <- bind_rows(stats) %>%
     PE = sum(PE),
     SG = sum(SG),
     SP = sum(SP),
+    JG = sum(JG),
+    JP = sum(JP),
     PUNTOS = sum(PUNTOS),
     .groups = "drop"
   )
 
-# === Ranking dentro de cada grupo (sin empates) ===
+# === 5) Ranking dentro de cada grupo (con desempates más finos) ===
 clasificacion_auto <- clasificacion_auto %>%
-  mutate(DIF_SETS = SG - SP) %>%
-  arrange(GRUPO, desc(PUNTOS), desc(PG), desc(DIF_SETS), SP, PAREJA) %>%
+  mutate(
+    DIF_SETS = SG - SP,
+    DIF_JUEGOS = JG - JP
+  ) %>%
+  arrange(GRUPO, desc(PUNTOS), desc(PG), desc(DIF_SETS), desc(DIF_JUEGOS), SP, JP, PAREJA) %>%
   group_by(GRUPO) %>%
   mutate(CLASIFICACION = row_number()) %>%
   ungroup() %>%
-  select(GRUPO, CLASIFICACION, PAREJA, PUNTOS, PJ, PG, PE, PP, SG, SP)
+  select(GRUPO, CLASIFICACION, PAREJA, PUNTOS, PJ, PG, PE, PP, SG, SP, JG, JP)
 
-# === 5) Añadir parejas que no han jugado (de 'clasificacion') ===
+# === 6) Añadir parejas que no han jugado (de 'clasificacion') ===
 if ("clasificacion" %in% excel_sheets(archivo)) {
   clasif_base <- read_excel(archivo, sheet = "clasificacion")
   names(clasif_base) <- toupper(str_trim(names(clasif_base)))
@@ -119,13 +142,15 @@ if ("clasificacion" %in% excel_sheets(archivo)) {
       PE = coalesce(PE, 0),
       PP = coalesce(PP, 0),
       SG = coalesce(SG, 0),
-      SP = coalesce(SP, 0)
+      SP = coalesce(SP, 0),
+      JG = coalesce(JG, 0),
+      JP = coalesce(JP, 0)
     ) %>%
-    select(GRUPO, CLASIFICACION, PAREJA, PUNTOS, PJ, PG, PE, PP, SG, SP) %>%
+    select(GRUPO, CLASIFICACION, PAREJA, PUNTOS, PJ, PG, PE, PP, SG, SP, JG, JP) %>%
     arrange(GRUPO, CLASIFICACION, PAREJA)
 }
 
-# === 6) Guardar resultados en Excel ===
+# === 7) Guardar resultados en Excel ===
 wb <- loadWorkbook(archivo)
 
 if ("clasificacion_auto" %in% names(wb)) removeWorksheet(wb, "clasificacion_auto")
@@ -134,7 +159,6 @@ writeData(wb, "clasificacion_auto", clasificacion_auto)
 
 # === Clasificación “bonita” para Streamlit ===
 clasificacion_final <- clasificacion_auto %>%
-  # Volver a poner los nombres de grupo en el formato exacto
   mutate(
     GRUPO = case_when(
       GRUPO == "mediocre alto" ~ "Mediocre alto",
@@ -142,25 +166,27 @@ clasificacion_final <- clasificacion_auto %>%
       GRUPO == "mediocre bajo" ~ "Mediocre bajo",
       TRUE ~ str_to_sentence(GRUPO)
     ),
-    # 👇 Aquí definimos el orden 
     GRUPO = factor(
       GRUPO,
       levels = c("Mediocre alto", "Mediocre medio", "Mediocre bajo")
     )
   ) %>%
-  arrange(GRUPO, CLASIFICACION) %>%  # respeta el orden definido arriba
+  arrange(GRUPO, CLASIFICACION) %>%
   rename(
     `P. JUGADOS` = PJ,
-    `P. GANADOS` = PG,
-    `P. EMPATADOS` = PE,
+    `P GANADOS` = PG,
+    `P EMPATADOS` = PE,
     `P. PERDIDOS` = PP,
     `SET GANADOS` = SG,
-    `SET PERDIDOS` = SP
+    `SET PERDIDOS` = SP,
+    `JUEGOS GANADOS` = JG,
+    `JUEGOS PERDIDOS` = JP
   ) %>%
   select(
     GRUPO, CLASIFICACION, PAREJA, PUNTOS,
-    `P. JUGADOS`, `P. GANADOS`, `P. EMPATADOS`,
-    `P. PERDIDOS`, `SET GANADOS`, `SET PERDIDOS`
+    `P. JUGADOS`, `P GANADOS`, `P EMPATADOS`,
+    `P. PERDIDOS`, `SET GANADOS`, `SET PERDIDOS`,
+    `JUEGOS GANADOS`, `JUEGOS PERDIDOS`
   )
 
 # === Escribir hoja “clasificacion” ===
