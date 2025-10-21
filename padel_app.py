@@ -53,6 +53,30 @@ if pagina == "Clasificación 🏅":
         (resultados["GRUPO"].str.lower() == grupo.lower()) &
         (resultados["VUELTA"].str.lower() == vuelta.lower())
     ]
+    # === Calcular progreso de partidos jugados ===
+    # Filtrar solo el grupo y vuelta seleccionados
+    resultados_f = resultados[
+        (resultados["GRUPO"].str.lower() == grupo.lower()) &
+        (resultados["VUELTA"].str.lower() == vuelta.lower())
+    ]
+    
+    # Obtener lista de parejas del grupo (para saber cuántos partidos posibles hay)
+    parejas_grupo = clasif[clasif["GRUPO"].str.lower() == grupo.lower()]["PAREJA"].nunique()
+    
+    # Total de partidos posibles (combinaciones sin repetición)
+    partidos_totales = int(parejas_grupo * (parejas_grupo - 1) / 2)
+    
+    # Partidos realmente jugados (con resultado rellenado)
+    partidos_jugados = resultados_f["RESULTADO_P1P2"].notna().sum()
+    
+    # Calcular porcentaje
+    porcentaje = (partidos_jugados / partidos_totales) * 100 if partidos_totales > 0 else 0
+    
+    # === Mostrar barra de progreso ===
+    st.markdown(f"### 🏁 Progreso de partidos jugados ({vuelta} - {grupo})")
+    st.progress(porcentaje / 100)
+    st.write(f"**Partidos jugados:** {partidos_jugados} / {partidos_totales}  →  ({porcentaje:.1f}%) completado")
+
 
     # === Mostrar tabla de clasificación ===
     st.subheader(f"📊 Clasificación - {grupo}")
@@ -219,5 +243,6 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
