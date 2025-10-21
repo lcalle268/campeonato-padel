@@ -150,6 +150,53 @@ if ("clasificacion" %in% excel_sheets(archivo)) {
     arrange(GRUPO, CLASIFICACION, PAREJA)
 }
 
+# === 6) Crear hoja de historial de partidos ===
+# Esta hoja guarda la evolución de cada pareja partido a partido
+
+historial <- resultados %>%
+  # Reorganizar para tener una fila por pareja en cada partido
+  pivot_longer(cols = c(PAREJA1, PAREJA2),
+               names_to = "ROL", values_to = "PAREJA") %>%
+  mutate(
+    FECHA = Sys.Date(),  # puedes cambiarlo si añades columna de fechas reales
+    PAREJA = str_squish(PAREJA),
+    GRUPO = tolower(str_squish(GRUPO)),
+    RESULTADO_P1P2 = if_else(is.na(RESULTADO_P1P2), "", RESULTADO_P1P2),
+    RESULTADO_P2P1 = if_else(is.na(RESULTADO_P2P1), "", RESULTADO_P2P1)
+  ) %>%
+  rowwise() %>%
+  mutate(
+    # Calcular sets ganados/perdidos en función del rol
+    sgsp = if (ROL == "PAREJA1") list(contar_sets(RESULTADO_P1P2)) else list(contar_sets(RESULTADO_P2P1)),
+    SG = sgsp["SG"],
+    SP = sgsp["SP"],
+    RESULTADO = case_when(
+      SG > SP ~ "Gana",
+      SG < SP ~ "Pierde",
+      TRUE ~ "Empata"
+    ),
+    PUNTOS = case_when(
+      RESULTADO == "Gana" ~ 3,
+      RESULTADO == "Empata" ~ 1,
+      TRUE ~ 0
+    )
+  ) %>%
+  ungroup() %>%
+  select(FECHA, GRUPO, VUELTA, PAREJA, RESULTADO, SG, SP, PUNTOS)
+
+# Acumular progresión por pareja
+historial <- historial %>%
+  group_by(GRUPO, PAREJA) %>%
+  arrange(FECHA) %>%
+  mutate(
+    PARTIDO = row_number(),
+    PUNTOS_ACUM = cumsum(PUNTOS),
+    PG = cumsum(RESULTADO == "Gana"),
+    PE = cumsum(RESULTADO == "Empata"),
+    PP = cumsum(RESULTADO == "Pierde")
+  ) %>%
+  ungroup()
+
 # === 7) Guardar resultados en Excel ===
 wb <- loadWorkbook(archivo)
 
@@ -166,27 +213,21 @@ clasificacion_final <- clasificacion_auto %>%
       GRUPO == "mediocre bajo" ~ "Mediocre bajo",
       TRUE ~ str_to_sentence(GRUPO)
     ),
-    GRUPO = factor(
-      GRUPO,
-      levels = c("Mediocre alto", "Mediocre medio", "Mediocre bajo")
-    )
+    GRUPO = factor(GRUPO, levels = c("Mediocre alto", "Mediocre medio", "Mediocre bajo"))
   ) %>%
   arrange(GRUPO, CLASIFICACION) %>%
   rename(
     `P. JUGADOS` = PJ,
-    `P GANADOS` = PG,
-    `P EMPATADOS` = PE,
+    `P. GANADOS` = PG,
+    `P. EMPATADOS` = PE,
     `P. PERDIDOS` = PP,
     `SET GANADOS` = SG,
-    `SET PERDIDOS` = SP,
-    `JUEGOS GANADOS` = JG,
-    `JUEGOS PERDIDOS` = JP
+    `SET PERDIDOS` = SP
   ) %>%
   select(
     GRUPO, CLASIFICACION, PAREJA, PUNTOS,
-    `P. JUGADOS`, `P GANADOS`, `P EMPATADOS`,
-    `P. PERDIDOS`, `SET GANADOS`, `SET PERDIDOS`,
-    `JUEGOS GANADOS`, `JUEGOS PERDIDOS`
+    `P. JUGADOS`, `P. GANADOS`, `P. EMPATADOS`,
+    `P. PERDIDOS`, `SET GANADOS`, `SET PERDIDOS`
   )
 
 # === Escribir hoja “clasificacion” ===
@@ -194,6 +235,11 @@ if ("clasificacion" %in% names(wb)) removeWorksheet(wb, "clasificacion")
 addWorksheet(wb, "clasificacion")
 writeData(wb, "clasificacion", clasificacion_final)
 
+# === Nueva hoja "historial_partidos" ===
+if ("historial_partidos" %in% names(wb)) removeWorksheet(wb, "historial_partidos")
+addWorksheet(wb, "historial_partidos")
+writeData(wb, "historial_partidos", historial)
+
 saveWorkbook(wb, archivo, overwrite = TRUE)
 
-cat("✅ Clasificación generada correctamente (hojas 'clasificacion_auto' y 'clasificacion')\n")
+cat("✅ Clasificación generada correctamente (hojas 'clasificacion_auto', 'clasificacion' y 'historial_partidos')\n")
