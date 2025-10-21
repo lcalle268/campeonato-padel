@@ -173,7 +173,37 @@ elif pagina == "Participantes 👥":
 # =============================
 elif pagina == "Informe semanal 🗞️":
     st.header("🗞️ Informe semanal del campeonato")
-    st.info("Aquí se irán comentando los partidos, tanto los éxitos como los fracasos (en proceso⚙️)")
+
+    # === Comentarios por fecha ===
+    informes = {
+        "2025-10-18": """
+        🗓️ **Informe del 18 de octubre de 2025**
+
+        Güenas a tod@s.  
+        Al final ha sido posible crear una web para seguir los resultados y clasificaciones del torneo en vivo.  
+        Ha sido gracias a nuestra compañera Lourdes, que ha obrado el milagro (nunca mejor dicho),  
+        y gracias a sus conocimientos y dedicación (fuera del horario de trabajo, por supuesto)  
+        ha conseguido crearla, además con virguerías como gráficos de evolución (e involución) de las parejas,  
+        y demás florituras.  
+        
+        Ahora esperemos que haga también magia dentro de la pista con una pala en la mano,  
+        pero eso ya será harina de otro costal.  
+
+        ---
+        Ya están actualizados los resultados de ayer.  
+        En el **Mediocre alto**, debut a lo campeón de los campeones,  
+        y un empate de los subcampeones sin mucha gloria que les mantiene arriba.  
+        En el **Mediocre medio**, **Teresa y Leticia** dan un puñetazo en la mesa  
+        y afeitan sin espuma a *Las Barbas*, que pasan a ser *los sin barba*,  
+        al menos hasta que les crezca algún pelillo… si lo hacen.
+        """
+    }
+
+    # === Selector de fecha ===
+    fecha_sel = st.selectbox("📅 Selecciona el día del informe:", list(informes.keys()))
+
+    # === Mostrar el texto ===
+    st.markdown(informes[fecha_sel])
 
 # =============================
 # === PESTAÑA 4: ESTADÍSTICAS
@@ -251,6 +281,7 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
 
