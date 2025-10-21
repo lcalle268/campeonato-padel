@@ -175,17 +175,30 @@ elif pagina == "Estadísticas 📊":
 
     chart = (
         alt.Chart(df_plot)
-        .mark_line(point=True)
+        .mark_line(point=True, strokeWidth=3)
         .encode(
             x=alt.X("PARTIDO:Q", title="Número de partido"),
             y=alt.Y("PUNTOS_ACUM:Q", title="Puntos acumulados"),
-            color=alt.Color("PAREJA:N", legend=alt.Legend(title="Pareja")),
+            color=alt.Color(
+                "PAREJA:N",
+                legend=alt.Legend(title="Pareja"),
+                scale=alt.Scale(scheme="set2")  # 🎨 Paleta de colores suave y diferenciada
+            ),
             tooltip=["PAREJA", "RESULTADO", "PUNTOS_ACUM", "PG", "PE", "PP"]
         )
-        .properties(height=400)
+        .properties(height=420, width="container")
+        .configure_axis(
+            labelFontSize=13,
+            titleFontSize=14
+        )
+        .configure_legend(
+            titleFontSize=13,
+            labelFontSize=12
+        )
     )
 
     st.altair_chart(chart, use_container_width=True)
+
 
     # === Tabla resumen de rendimiento ===
     st.subheader("📋 Rendimiento acumulado")
@@ -206,4 +219,5 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
