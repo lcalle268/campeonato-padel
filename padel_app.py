@@ -176,8 +176,8 @@ elif pagina == "Informe semanal 🗞️":
 
     # === Comentarios por fecha ===
     informes = {
-        "2025-10-18": """
-        🗓️ **Informe del 18 de octubre de 2025**
+        "21/10/2025": """
+        🗓️ **Informe del 21/10/2025**
 
         Güenas a tod@s.  
         
@@ -271,6 +271,7 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
 
