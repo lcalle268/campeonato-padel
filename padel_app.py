@@ -259,43 +259,6 @@ elif pagina == "Estadísticas 📊":
         ["Boxplot", "Violin"],
         horizontal=True
     )
-    
-    # === Prepara los datos ===
-    if "PUNTOS_ACUM" not in df_plot.columns:
-        st.warning("⚠️ No hay datos de puntos acumulados disponibles para este grupo.")
-    else:
-        if tipo_grafico == "Boxplot":
-            chart_box = (
-                alt.Chart(df_plot)
-                .mark_boxplot(size=40)
-                .encode(
-                    x=alt.X("PAREJA:N", title="Pareja"),
-                    y=alt.Y("PUNTOS_ACUM:Q", title="Puntos acumulados"),
-                    color=alt.Color("PAREJA:N", legend=None)
-                )
-                .properties(height=400)
-            )
-            st.altair_chart(chart_box, use_container_width=True)
-    
-        elif tipo_grafico == "Violin":
-            chart_violin = (
-                alt.Chart(df_plot)
-                .transform_density(
-                    "PUNTOS_ACUM",
-                    as_=["PUNTOS_ACUM", "density"],
-                    groupby=["PAREJA"]
-                )
-                .mark_area(orient="horizontal", opacity=0.6)
-                .encode(
-                    y=alt.Y("PAREJA:N", title="Pareja"),
-                    x=alt.X("density:Q", title="Densidad", stack="center"),
-                    color=alt.Color("PAREJA:N", legend=None),
-                    color=alt.Color("PAREJA:N", legend=None, scale=alt.Scale(scheme="set2"))
-                )
-                .properties(height=400)
-            )
-            st.altair_chart(chart_violin, use_container_width=True)
-
 
     # === Tabla resumen de rendimiento ===
     st.subheader("📋 Rendimiento acumulado")
@@ -317,6 +280,7 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
 
