@@ -20,7 +20,8 @@ pagina = st.sidebar.radio(
         "Participantes 👥",
         "Informe semanal 🗞️",
         "Estadísticas 📊",
-        "Campeonato Final 🏆"
+        "Campeonato Final 🏆",
+        "Buzón de denuncias📢"
     ]
 )
 
@@ -262,15 +263,70 @@ elif pagina == "Estadísticas 📊":
     )
 
     st.dataframe(resumen, use_container_width=True, hide_index=True)
+# =============================
+# === PESTAÑA 5: DENUNCIAS ANÓNIMAS
+# =============================
+elif pagina == "Denuncias 📢":
+    st.header("📢 Buzón de denuncias anónimas")
+
+    st.write(
+        "Aquí puedes dejar tus quejas, observaciones o denuncias del campeonato... "
+        "de forma totalmente anónima 😎. "
+        "Ejemplo: 'Juan nunca trae bolas nuevas', 'María siempre se escaquea de pagar la pista'..."
+    )
+
+    denuncia = st.text_area("✍️ Escribe tu denuncia:", "")
+
+    archivo_denuncias = "denuncias.xlsx"
+
+    if st.button("Enviar denuncia"):
+        if denuncia.strip() != "":
+            import datetime
+            import pandas as pd
+            import os
+
+            fecha = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
+
+            # Si no existe el archivo, crearlo
+            if not os.path.exists(archivo_denuncias):
+                df = pd.DataFrame(columns=["FECHA", "DENUNCIA"])
+                df.to_excel(archivo_denuncias, index=False)
+
+            # Cargar y añadir nueva denuncia
+            df_existente = pd.read_excel(archivo_denuncias)
+            nueva = pd.DataFrame([[fecha, denuncia]], columns=["FECHA", "DENUNCIA"])
+            df = pd.concat([df_existente, nueva], ignore_index=True)
+            df.to_excel(archivo_denuncias, index=False)
+
+            st.success("✅ Denuncia enviada correctamente (anónima, por supuesto).")
+        else:
+            st.warning("⚠️ No puedes enviar una denuncia vacía.")
+
+    # === Mostrar denuncias previas ===
+    try:
+        denuncias_df = pd.read_excel(archivo_denuncias)
+        if not denuncias_df.empty:
+            st.subheader("📋 Últimas denuncias recibidas:")
+            st.dataframe(
+                denuncias_df.sort_values("FECHA", ascending=False),
+                use_container_width=True,
+                hide_index=True
+            )
+        else:
+            st.info("Aún no hay denuncias registradas.")
+    except FileNotFoundError:
+        st.info("Aún no hay denuncias registradas.")
+
 
 # =============================
-# === PESTAÑA 5: CAMPEONATO
+# === PESTAÑA 6: CAMPEONATO
 # =============================
 elif pagina == "Campeonato Final 🏆":
     st.header("🏆 Cuadro final")
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
 
