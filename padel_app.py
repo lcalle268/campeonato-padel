@@ -181,8 +181,6 @@ elif pagina == "Informe semanal 🗞️":
 
         Güenas a tod@s.  
         
-        Al final ha sido posible crear una web para seguir los resultados y clasificaciones del torneo en vivo. Ha sido gracias a nuestra compañera Lourdes, que ha obrado el milagro (nunca mejor dicho), y gracias a sus conocimientos y dedicación (fuera del horario de trabajo, por supuesto) ha conseguido crearla, además con virguerías como gráficos de evolución (e involución) de las parejas, y demás florituras. Ahora esperemos que haga también magia dentro de la pista con una pala en la mano, pero eso ya será harina de otro costal.  
-
         Ya están actualizados los resultados de ayer. 
         
         En el **Mediocre alto**, debut a lo campeón de los campeones, y un empate de los subcampeones sin mucha gloria que les mantiene arriba.  
@@ -273,6 +271,7 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
 
