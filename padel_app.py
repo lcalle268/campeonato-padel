@@ -251,14 +251,6 @@ elif pagina == "Estadísticas 📊":
 
     st.altair_chart(chart, use_container_width=True)
 
-    # ===  Boxplot / Diagrama de violín ===
-    st.subheader("🎻 Distribución de puntos acumulados")
-    
-    tipo_grafico = st.radio(
-        "Selecciona el tipo de gráfico:",
-        ["Boxplot", "Violin"],
-        horizontal=True
-    )
 
     # === Tabla resumen de rendimiento ===
     st.subheader("📋 Rendimiento acumulado")
@@ -280,6 +272,7 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
 
