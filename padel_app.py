@@ -186,8 +186,24 @@ elif pagina == "Informe semanal 🗞️":
         En el **Mediocre alto**, debut a lo campeón de los campeones, y un empate de los subcampeones sin mucha gloria que les mantiene arriba.  
         
         En el **Mediocre medio**, *Teresa y Leticia* dan un puñetazo en la mesa y afeitan sin espuma a *Las Barbas*, que pasan a ser *Los sin barba*, al menos hasta que les crezca algún pelillo… si lo hacen.
-        """
-    }
+        """,
+    "07/11/2025": """
+        🗓️ **Informe del 07/11/2025**
+
+        Güenas. En primer lugar decir que el torneo va avanzando a buen ritmo, luego felicidades por ello, a ver si para antes de navidad tenemos toda la primera fase acabada.
+
+        A destacar, que en el mediocre alto los luises van líderes solidos después de infringir la primera derrota en dos años a fla-delicatessen, que no pasan por su mejor momento (ni en el padel ni en el tinder). Destacar la victoria también de Nuño y Jorge (Los otrora truño y morgue), que nadie apostaba por ellos pero siempre dan coletazos (normalmente siempre a los mismos).
+        
+        En el mediocre medio Marta y Salva caminan con paso sólido, a la espera de ver la progresión de Victor y Tito (en adelante el tito Victor"), que aun no han perdido un juego, y eso siempre da respeto. 
+         
+        En el bajo a las hermanas atómicas no hay quien las sople, y se postulan para el liderato y optar a subir de nivel. 
+        
+        En este sentido (lo de subir nivel), se va a cambiar el criterio anterior, de que el que ascienden herede los puntos que tenía al que ganen (que quedó último del grupo anterior), y viceversa, puesto que  el que sube se podría encontrar con estar con 0 puntos, ya en una situación crítica. Al final se ha decidido que el que sube entre con los mismos puntos que tenga el 4º (en el caso del grupo 1), 5º (en el caso del grupo 2). con opciones por tanto de optar a meterse en el cuadro final de semifinales. El que baja hereda los puntos que tenga el segundo de cada grupo (no el primero como era antes). Esto parece lioso pero después de unas copas lo veréis clarinete. 
+        
+        Para finalizar recordaros que hay gente que aún no ha pagado la cuota del torneo. No vamos a ser como Montoro de sacar el listado de morosos....de momento. 
+        
+        Saludos cordiales desde Alberto Bosch 16, planta sexta, sector B. 
+ }
 
     # === Selector de fecha ===
     fecha_sel = st.selectbox("📅 Selecciona el día del informe:", list(informes.keys()))
@@ -272,6 +288,7 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
 
