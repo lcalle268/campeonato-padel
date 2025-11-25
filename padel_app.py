@@ -232,9 +232,16 @@ elif pagina == "Informe semanal 🗞️":
         """
     }
 
-    # === Selector de fecha ===
-    fecha_sel = st.selectbox("📅 Selecciona el día del informe:", sorted(list(informes.keys()), reverse=True))
+    # === Ordenar fechas (formato dd/mm/yyyy) ===
+    fechas_ordenadas = sorted(
+        informes.keys(),
+        key=lambda f: datetime.datetime.strptime(f, "%d/%m/%Y"),
+        reverse=True  # más reciente primero
+    )
 
+    # === Selector de fecha ===
+    fecha_sel = st.selectbox("📅 Selecciona el día del informe:", fechas_ordenadas)
+    
     # === Mostrar el texto ===
     st.markdown(informes[fecha_sel])
 
@@ -316,6 +323,7 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
 
