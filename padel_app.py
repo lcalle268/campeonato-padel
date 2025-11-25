@@ -172,6 +172,7 @@ elif pagina == "Participantes 👥":
 # === PESTAÑA 3: INFORME SEMANAL
 # =============================
 elif pagina == "Informe semanal 🗞️":
+    import datetime
     st.header("🗞️ Informe semanal del campeonato")
 
     # === Comentarios por fecha ===
@@ -236,7 +237,7 @@ elif pagina == "Informe semanal 🗞️":
     fechas_ordenadas = sorted(
         informes.keys(),
         key=lambda f: datetime.datetime.strptime(f, "%d/%m/%Y"),
-        reverse=True  # más reciente primero
+        reverse=True 
     )
 
     # === Selector de fecha ===
@@ -323,6 +324,7 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
 
