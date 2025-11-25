@@ -186,14 +186,58 @@ elif pagina == "Informe semanal 🗞️":
         En el **Mediocre alto**, debut a lo campeón de los campeones, y un empate de los subcampeones sin mucha gloria que les mantiene arriba.  
         
         En el **Mediocre medio**, *Teresa y Leticia* dan un puñetazo en la mesa y afeitan sin espuma a *Las Barbas*, que pasan a ser *Los sin barba*, al menos hasta que les crezca algún pelillo… si lo hacen.
+        """,
+
+        "07/11/2025": """
+        🗓️ **Informe del 07/11/2025**
+
+        Güenas.  
+        En primer lugar, decir que el torneo va avanzando a buen ritmo, así que felicidades por ello.  
+        A ver si para antes de Navidad tenemos toda la primera fase acabada.  
+
+        En el **Mediocre alto**, *Los Luises* van líderes sólidos después de infringir la primera derrota en dos años a *Fla-Delicatessen*, que no pasan por su mejor momento (ni en el pádel ni en el Tinder 😅).  
+        Destacar también la victoria de *Nuño y Jorge* (los otrora *Truño y Morgue*), que nadie apostaba por ellos, pero siempre dan coletazos — normalmente a los mismos.  
+
+        En el **Mediocre medio**, *Marta y Salva* caminan con paso firme, a la espera de ver la progresión de *Víctor y Tito* (en adelante “el Tito Víctor”), que aún no han perdido un juego, y eso siempre da respeto.  
+
+        En el **Mediocre bajo**, las *hermanas atómicas* no tienen rival y se postulan para el liderato y optar a subir de nivel.  
+
+        En este sentido, se ha cambiado el criterio anterior:  
+        - El que **asciende** entrará con los mismos puntos que tenga el 4º del grupo superior (o el 5º en el caso del grupo 2).  
+        - El que **baja** heredará los puntos del **segundo** de su nuevo grupo (no del primero como antes).  
+        
+        Parece lioso, pero después de unas copas lo veréis clarinete.  
+
+        Para finalizar, recordaros que aún hay gente que no ha pagado la cuota del torneo.  
+        No vamos a ser como Montoro de sacar el listado de morosos... de momento.  
+
+        _Saludos cordiales desde Alberto Bosch 16, planta sexta, sector B._
+        """,
+
+        "25/11/2025": """
+        🗓️ **Informe del 25/11/2025**
+
+        Güenas.  
+        Quería recordaros que la primera fase debe acabarse antes de las entrañables fiestas,  
+        así que hay que ponerse las pilas — sobre todo algunas parejas que han jugado más bien poco.  
+
+        Es clave que los grupos estén sincronizados, puesto que hasta que no se jueguen los partidos de ascensos y descensos se paralizará todo.  
+        Si tenéis problemas de agenda, jugad en horario de trabajo: seguro que vuestros jefes os dejan, al menos en esta semana del *Black Friday*.  
+
+        Por lo demás, todo muy bien y muy contentos con el desarrollo del campeonato.  
+        Por poner un pero, aún queda alguna pareja sin pagar la cuota 💸.  
+        Decid a vuestros jefes (ya de paso) que os suban la productividad si es necesario.  
+
+        _Saludos cordiales desde Jazmín 35 (siempre tengo cerveza en la nevera 🍺)._
         """
- }
+    }
 
     # === Selector de fecha ===
-    fecha_sel = st.selectbox("📅 Selecciona el día del informe:", list(informes.keys()))
+    fecha_sel = st.selectbox("📅 Selecciona el día del informe:", sorted(list(informes.keys()), reverse=True))
 
     # === Mostrar el texto ===
     st.markdown(informes[fecha_sel])
+
 
 # =============================
 # === PESTAÑA 4: ESTADÍSTICAS
@@ -272,6 +316,7 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
 
