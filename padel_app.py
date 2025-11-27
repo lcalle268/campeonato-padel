@@ -203,7 +203,11 @@ elif pagina == "Informe semanal 🗞️":
 
         En el **Mediocre bajo**, las *hermanas atómicas* no tienen rival y se postulan para el liderato y optar a subir de nivel.  
 
-        En este sentido, se ha cambiado el criterio anterior:  
+        En este sentido -lo de subir de nivel-, se va a cambiar el criterio anterior: 
+        Hasta ahora, quien ascendía heredaba los puntos del último del grupo superior, y viceversa.
+        El problema es que quien subía podía encontrarse con 0 puntos, quedando desde el principio en una situación bastante crítica.
+        
+        A partir de ahora, se establece lo siguiente:
         - El que **asciende** entrará con los mismos puntos que tenga el 4º del grupo superior (o el 5º en el caso del grupo 2).  
         - El que **baja** heredará los puntos del **segundo** de su nuevo grupo (no del primero como antes).  
         
@@ -324,6 +328,7 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
 
