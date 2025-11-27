@@ -206,6 +206,7 @@ elif pagina == "Informe semanal 🗞️":
         En este sentido (lo de subir de nivel), se va a cambiar el criterio anterior: 
         
         Hasta ahora, quien ascendía heredaba los puntos del último del grupo superior, y viceversa.
+        
         El problema es que quien subía podía encontrarse con 0 puntos, quedando desde el principio en una situación bastante crítica.
         
         A partir de ahora, se establece lo siguiente:
@@ -329,6 +330,7 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
 
