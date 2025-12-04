@@ -75,7 +75,8 @@ if pagina == "Clasificación 🏅":
     # === Mostrar barra de progreso ===
     st.markdown(f"### 🏁 Progreso de partidos jugados ({vuelta} - {grupo})")
     st.progress(porcentaje / 100)
-    st.write(f"**Partidos jugados:** {partidos_jugados} / {partidos_totales} )# →  ({porcentaje:.1f}%) completado")
+    st.write(f"**Partidos jugados:** {partidos_jugados} / {partidos_totales})
+    # →  ({porcentaje:.1f}%) completado")
     
      === Mostrar mensaje según porcentaje ===
     if porcentaje < 50:
@@ -330,6 +331,7 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
 
