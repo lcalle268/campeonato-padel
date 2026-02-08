@@ -272,7 +272,7 @@ elif pagina == "Informe semanal 🗞️":
 
         Como se dijo, si finalmente se produce un ascenso:
         - La pareja que suba entrará en el medio con los puntos del **penúltimo del grupo medio** (3).  
-        - El que descienda entrará en el medio con los puntos del **segundo del grupo bajo** (15).
+        - El que descienda entrará en el bajo con los puntos del **segundo del grupo bajo** (15).
 
         Por otro lado, comunicar que en el grupo medio se ha producido la baja de la pareja **Tito-Víctor**.
 
@@ -387,6 +387,7 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
 
