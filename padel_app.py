@@ -181,11 +181,11 @@ elif pagina == "Informe semanal 🗞️":
         🗓️ **Informe del 21/10/2025**
 
         Güenas a tod@s.  
-        
+
         Ya están actualizados los resultados de ayer. 
-        
+
         En el **Mediocre alto**, debut a lo campeón de los campeones, y un empate de los subcampeones sin mucha gloria que les mantiene arriba.  
-        
+
         En el **Mediocre medio**, *Teresa y Leticia* dan un puñetazo en la mesa y afeitan sin espuma a *Las Barbas*, que pasan a ser *Los sin barba*, al menos hasta que les crezca algún pelillo… si lo hacen.
         """,
 
@@ -203,20 +203,21 @@ elif pagina == "Informe semanal 🗞️":
 
         En el **Mediocre bajo**, las *hermanas atómicas* no tienen rival y se postulan para el liderato y optar a subir de nivel.  
 
-        En este sentido (lo de subir de nivel), se va a cambiar el criterio anterior: 
-        
-        Hasta ahora, quien ascendía heredaba los puntos del último del grupo superior, y viceversa.
-        
+        En este sentido (lo de subir de nivel), se va a cambiar el criterio anterior.  
+        Hasta ahora, quien ascendía heredaba los puntos del último del grupo superior, y viceversa.  
         El problema es que quien subía podía encontrarse con 0 puntos, quedando desde el principio en una situación bastante crítica.
-        
+
         A partir de ahora, se establece lo siguiente:
-        - El que **asciende** entrará con los mismos puntos que tenga el 4º del grupo superior (o el 5º en el caso del grupo 2).  
+
+        - El que **asciende** entrará con los mismos puntos que tenga **el penúltimo de su nuevo grupo**:  
+          el **4º en el grupo 1**, el **5º en el grupo 2** o el **6º en el grupo 3**.  
+
         - El que **baja** heredará los puntos del **segundo** de su nuevo grupo (no del primero como antes).  
-        
-        Parece lioso, pero después de unas copas lo veréis clarinete.  
+
+        Parece lioso, pero después de unas copas lo veréis clarinete 🍻.  
 
         Para finalizar, recordaros que aún hay gente que no ha pagado la cuota del torneo.  
-        No vamos a ser como Montoro de sacar el listado de morosos... de momento.  
+        No vamos a ser como Montoro de sacar el listado de morosos... de momento 😏.  
 
         _Saludos cordiales desde Alberto Bosch 16, planta sexta, sector B._
         """,
@@ -233,9 +234,64 @@ elif pagina == "Informe semanal 🗞️":
 
         Por lo demás, todo muy bien y muy contentos con el desarrollo del campeonato.  
         Por poner un pero, aún queda alguna pareja sin pagar la cuota 💸.  
-        Decid a vuestros jefes (ya de paso) que os suban la productividad si es necesario.  
+        Decid a vuestros jefes (ya de paso) que os suban la productividad si es necesario 😆.  
 
         _Saludos cordiales desde Jazmín 35 (siempre tengo cerveza en la nevera 🍺)._
+        """,
+
+        "18/12/2025": """
+        🗓️ **Informe del 18/12/2025**
+
+        Güenas a todos.  
+        Aunque no se han acabado todos los partidos de la primera fase, y ya no creo que se acaben antes de las fiestas,  
+        ya se pueden establecer los cruces de *play-off* de ascenso y descenso.
+
+        En el cruce **grupo 1-2**, el *play-off* será **Ángel-Ceci** contra **Marta-Salva**.  
+        En el *play-off* **2-3**, serán **Álvaro y Pablo**, más conocidos como *“cuando las barbas del vecino veas cortar”*,  
+        contra **Juanjo y Miguel Ángel**.  
+
+        Así que si queréis, ya podéis ir jugándolos.
+
+        No obstante, se podrán acabar después de Navidad los partidos que queden de la primera vuelta (que no son muchos),  
+        y además pueden influir en los puntos que coja alguna pareja en caso de que se produzcan ascensos o descensos.
+
+        _Saludos cordiales._
+        """,
+
+        "02/02/2026": """
+        🗓️ **Informe del 02/02/2026**
+
+        Güenas a tod@s.  
+        Pasadas ya las entrañables fiestas y el periodo para pedir vacaciones de 2025, es hora de retomar el torneo.
+
+        De los *play-off* de ascenso-descenso ya se ha jugado el partido **Marta-Salva** contra **Cecilio-Ángel**,  
+        con victoria de los segundos por **6-3, 6-1**, ergo el grupo alto sigue como estaba.
+
+        Quedaría por jugarse el otro partido de *play-off*, que se espera se juegue esta semana.  
+        No obstante, ya se pueden ir jugando partidos de la segunda fase (salvo los que afecten a esas dos parejas).
+
+        Como se dijo, si finalmente se produce un ascenso:
+        - La pareja que suba entrará en el medio con los puntos del **penúltimo del grupo medio**.  
+        - El que descienda entrará en el medio con los puntos del **segundo del grupo bajo**.
+
+        Por otro lado, comunicar que en el grupo medio se ha producido la baja de la pareja **Tito-Víctor**.
+
+        _Saludos cordiales._
+        """,
+
+        "06/02/2026": """
+        🗓️ **Informe del 06/02/2026**
+
+        Güenas.  
+        Ya se ha jugado el otro partido de *play-off* de ascenso, con victoria de **Juanjo y Miguel Ángel** sobre **Pablo y Álvaro**,  
+        ergo se ha producido *sorpasso* 😎.
+
+        La página web estará actualizada con las nuevas clasificaciones el próximo lunes.
+
+        Ya se puede ir jugando la segunda vuelta, que esperemos finalice por abril,  
+        para poder jugar la fase final del torneo en mayo, mes de las flores 🌸.
+
+        _Saludos cordiales._
         """
     }
 
@@ -243,14 +299,15 @@ elif pagina == "Informe semanal 🗞️":
     fechas_ordenadas = sorted(
         informes.keys(),
         key=lambda f: datetime.datetime.strptime(f, "%d/%m/%Y"),
-        reverse=True 
+        reverse=True
     )
 
     # === Selector de fecha ===
     fecha_sel = st.selectbox("📅 Selecciona el día del informe:", fechas_ordenadas)
-    
+
     # === Mostrar el texto ===
     st.markdown(informes[fecha_sel])
+
 
 
 # =============================
@@ -330,6 +387,7 @@ elif pagina == "Campeonato Final 🏆":
     st.info("Aquí se podrá visualizar el cuadro de semifinales y finales🏁.")
 
   
+
 
 
 
